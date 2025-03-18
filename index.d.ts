@@ -79,13 +79,11 @@ export class AchexDataEvent {
 export class AchexSessionJoinChannelEvent {
     private constructor();
     readonly channel: AchexChannel;
-    readonly sessionId: string;
-    readonly sessionName: string;
+    readonly session: AchexSession;
 }
 
 export class AchexSessionLeaveChannelEvent {
     private constructor();
     readonly channel: AchexChannel;
-    readonly sessionId: string;
-    readonly sessionName: string;
+    readonly session: AchexSession;
 }

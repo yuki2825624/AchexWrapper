@@ -59,10 +59,14 @@ export class Achex {
 
             if ("FROM" in packet) {
                 if ("toS" in packet) {
-                    this.events.emit("data", { data: packet });
+                    const { FROM: name, sID: id } = packet;
+                    const session = new AchexSession(this, id, name);
+                    this.events.emit("data", { data: packet, session });
                 }
                 if ("toH" in packet) {
-                    this.events.emit("data", { data: packet });
+                    const { toH: name } = packet;
+                    const channel = new AchexChannel(this, name);
+                    this.events.emit("data", { data: packet, channel });
                 }
             }
             else {
@@ -73,14 +77,16 @@ export class Achex {
             
             if ("joinedHub" in packet) {
                 const { joinedHub: channelName, user: sessionName, sID: sessionId } = packet;
+                const session = new AchexSession(this, sessionId, sessionName, false);
                 const channel = new AchexChannel(this, channelName);
-                this.events.emit("sessionJoinChannel", { channel, sessionName, sessionId });
+                this.events.emit("sessionJoinChannel", { channel, session });
             }
 
             if ("leftHub" in packet) {
                 const { joinedHub: channelName, user: sessionName, sID: sessionId } = packet;
+                const session = new AchexSession(this, sessionId, sessionName, false);
                 const channel = new AchexChannel(this, channelName);
-                this.events.emit("sessionJoinChannel", { channel, sessionName, sessionId });
+                this.events.emit("sessionLeaveChannel", { channel, session });
             }
         });
 
